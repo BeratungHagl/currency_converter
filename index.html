@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Währungsrechner — Beratung Hagl</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000000;
+      --green: #517F34;
+      --green-dark: #3d6026;
+      --white: #ffffff;
+      --grey-light: #F2F2F2;
+      --grey-mid: #4A4A4A;
+      --grey-border: #e0e0e0;
+      --text-muted: #6b6b6b;
+      --shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--grey-light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .brand-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+    .brand-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--grey-mid);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .brand-tagline {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--grey-border);
+    }
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--green);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-icon svg { color: white; }
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--black);
+    }
+    .card-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .field-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 110px;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      padding: 10px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--black);
+      background: var(--white);
+      border: 1.5px solid var(--grey-border);
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--green);
+    }
+    input[type="number"] {
+      font-size: 20px;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234A4A4A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+      cursor: pointer;
+    }
+
+    .swap-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0.5rem 0;
+    }
+    .swap-line {
+      flex: 1;
+      height: 1px;
+      background: var(--grey-border);
+    }
+    .swap-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--grey-border);
+      background: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, background 0.15s, transform 0.2s;
+      flex-shrink: 0;
+    }
+    .swap-btn:hover {
+      border-color: var(--green);
+      background: #f4f9f0;
+      transform: rotate(180deg);
+    }
+    .swap-btn svg { color: var(--grey-mid); }
+
+    .to-row {
+      margin-bottom: 1.25rem;
+    }
+    .to-row select {
+      width: 100%;
+    }
+
+    .result-box {
+      background: var(--grey-light);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-top: 0.25rem;
+    }
+    .result-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .result-amount {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--black);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+    .result-currency {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--grey-mid);
+      margin-left: 6px;
+    }
+    .result-rate {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    .result-loading {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 4px 0;
+    }
+    .result-error {
+      font-size: 12px;
+      color: #c0392b;
+      padding: 4px 0;
+    }
+
+    .status-line {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+    }
+
+    footer {
+      margin-top: 1.75rem;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+    footer a {
+      color: var(--green);
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 480px) {
+      .card { padding: 1.5rem; }
+      .result-amount { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand">
+    <div class="brand-mark">
+      <div class="brand-dot"></div>
+      <span class="brand-name">Beratung Hagl</span>
+    </div>
+    <div class="brand-tagline">Organisationen auf Reiseflughöhe</div>
+  </div>
+
+  <div class="card" role="main">
+    <div class="card-header">
+      <div class="card-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="card-title">Währungsrechner</div>
+        <div class="card-sub">Aktuelle Wechselkurse — EUR · USD · GBP</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="field-label">Betrag &amp; Ausgangswährung</div>
+      <div class="input-row">
+        <input type="number" id="amount" value="100" min="0" step="any" aria-label="Betrag" />
+        <select id="from" aria-label="Ausgangswährung">
+          <option value="EUR">🇪🇺 EUR</option>
+          <option value="USD">🇺🇸 USD</option>
+          <option value="GBP">🇬🇧 GBP</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="swap-row">
+      <div class="swap-line"></div>
+      <button class="swap-btn" id="swapBtn" title="Währungen tauschen" aria-label="Währungen tauschen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4"/>
+        </svg>
+      </button>
+      <div class="swap-line"></div>
+    </div>
+
+    <div class="to-row">
+      <div class="field-label">Zielwährung</div>
+      <select id="to" aria-label="Zielwährung">
+        <option value="USD">🇺🇸 USD</option>
+        <option value="EUR">🇪🇺 EUR</option>
+        <option value="GBP">🇬🇧 GBP</option>
+      </select>
+    </div>
+
+    <div class="result-box" aria-live="polite">
+      <div class="result-label">Ergebnis</div>
+      <div id="resultLoading" class="result-loading">Kurse werden geladen …</div>
+      <div id="resultValue" style="display:none;">
+        <div>
+          <span class="result-amount" id="convertedAmount">—</span>
+          <span class="result-currency" id="convertedCurrency"></span>
+        </div>
+        <div class="result-rate" id="rateInfo"></div>
+      </div>
+      <div id="errorMsg" class="result-error"></div>
+    </div>
+
+    <div class="status-line" id="statusLine" style="display:none;">
+      <span class="status-dot"></span>
+      <span id="statusText"></span>
+    </div>
+  </div>
+
+  <footer>
+    Kursdaten via <a href="https://github.com/fawazahmed0/exchange-api" target="_blank" rel="noopener">Exchange API</a> —
+    unverbindlich, kein Finanzrat<br>
+    &copy; <span id="yr"></span> Beratung Hagl
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    const SYMBOLS = { EUR: '€', USD: '$', GBP: '£' };
+    let rates = null;
+    let lastUpdated = null;
+
+    async function fetchRates() {
+      try {
+        const res = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        rates = {
+          EUR: { EUR: 1,               USD: data.eur.usd,              GBP: data.eur.gbp },
+          USD: { EUR: 1/data.eur.usd,  USD: 1,                         GBP: data.eur.gbp/data.eur.usd },
+          GBP: { EUR: 1/data.eur.gbp,  USD: data.eur.usd/data.eur.gbp, GBP: 1 }
+        };
+        lastUpdated = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function convert() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const from   = document.getElementById('from').value;
+      const to     = document.getElementById('to').value;
+
+      document.getElementById('errorMsg').textContent = '';
+
+      if (!rates) return;
+
+      const loading = document.getElementById('resultLoading');
+      const value   = document.getElementById('resultValue');
+
+      if (isNaN(amount) || amount < 0) {
+        loading.style.display = 'none';
+        value.style.display = 'block';
+        document.getElementById('convertedAmount').textContent = '—';
+        document.getElementById('convertedCurrency').textContent = '';
+        document.getElementById('rateInfo').textContent = '';
+        return;
+      }
+
+      const rate   = rates[from][to];
+      const result = amount * rate;
+
+      loading.style.display = 'none';
+      value.style.display = 'block';
+
+      document.getElementById('convertedAmount').textContent =
+        result.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('convertedCurrency').textContent =
+        SYMBOLS[to] + ' ' + to;
+
+      const rateDisplay = rate >= 1
+        ? `1 ${from} = ${rate.toLocaleString('de-DE', { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ${to}`
+        : `1 ${to} = ${(1/rate).toLocaleString('de-DE', { minimumFractionDigits: 4, maximumFractionDigits: 4 })} ${from}`;
+      document.getElementById('rateInfo').textContent = rateDisplay;
+
+      if (lastUpdated) {
+        const sl = document.getElementById('statusLine');
+        sl.style.display = 'flex';
+        document.getElementById('statusText').textContent = 'Kurs vom ' + lastUpdated + ' Uhr';
+      }
+    }
+
+    document.getElementById('swapBtn').addEventListener('click', () => {
+      const f = document.getElementById('from');
+      const t = document.getElementById('to');
+      [f.value, t.value] = [t.value, f.value];
+      convert();
+    });
+
+    ['amount', 'from', 'to'].forEach(id => {
+      document.getElementById(id).addEventListener('input', convert);
+      document.getElementById(id).addEventListener('change', convert);
+    });
+
+    (async () => {
+      const ok = await fetchRates();
+      if (!ok) {
+        document.getElementById('resultLoading').style.display = 'none';
+        document.getElementById('errorMsg').textContent =
+          'Kurse konnten nicht geladen werden. Bitte Seite neu laden.';
+      } else {
+        convert();
+      }
+    })();
+  </script>
+</body>
+</html>
